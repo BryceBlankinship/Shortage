@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "shortage-native",
+    "name": "Shortage",
     "slug": "shortage-native",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/shortage.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/shortage.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,16 +18,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bryceblankinship.shortage",
+      "buildNumber": "0.0.1"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/shortage.jpg",
+        "backgroundColor": "#FFFFFF",
+        "package": "com.bryceblankinship.shortage",
+        "versionCode": 1
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/shortage.jpg"
     }
   }
 }

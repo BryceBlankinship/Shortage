@@ -1,4 +1,19 @@
-# How Shortage is set up
+# Tasks
+
+- [ ] Create lists feature (frontend)
+- [ ] Create lists feature (backend)
+- [ ] User authentication (frontend)
+- [ ] User authentication (backend)
+- [ ] API authorizations (backend (middleware))
+- [ ] Discover page "algorithm" (backend)
+- [ ] Populate nearby places with Google Places API (backend)
+- [ ] Populate nearby places component (frontend)
+
+# Issues
+
+- [ ] Search not working on desktop
+
+### How Shortage is set up
 
 This is very important. Since React Native does not actually play nicely with React (bummer), everything is going to be written with React Native. This is new to me and is going to be interesting to see how to make desktop layouts.
 One strong point of React Native is that it knows when the user is on an app vs web. Let's see how useful this really is though, or if I'm going to have to write my stylesheets as if they are CSS-responsive sheets anyway.
