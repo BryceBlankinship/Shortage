@@ -1,6 +1,6 @@
 import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
-import VerticalCard from './VerticalCard';
-import HorizontalCard from './HorizontalCard';
+import VerticalCard from '../components/verticalCard';
+import HorizontalCard from '../components/horizontalCard';
 
 const styles = StyleSheet.create({
     searchContainer: {
@@ -8,20 +8,22 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'flex-start',
-        margin: 20,
+        alignSelf: 'stretch',
     },
     header: {
+        marginLeft: 20,
         fontSize: 30,
         fontWeight: '700'
     },
     searchBox: {
+        marginLeft: 20,
         marginTop: 10,
         padding: 10,
         backgroundColor: '#F5F5F5',
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 8,
-        alignSelf: 'stretch'
+        marginRight: 20
     },
 
     cardRowOuterContainer: {
@@ -31,16 +33,18 @@ const styles = StyleSheet.create({
     cardRowContainer: {
         flex: 1,
         flexDirection: 'row',
-        marginRight: -20,
         // match the height of the verticalCard so that the container doesnt spill into the next one
         maxHeight: 130,
     },
 
     cardRowLabel: {
+        marginLeft: 20,
         marginBottom: 5,
     },
 
     cardColumnOuterContainer: {
+        marginBottom: 100,
+        marginLeft: 20,
         marginTop: 20,
         flex: 1,
         flexDirection: 'column',
@@ -53,16 +57,16 @@ export default function SearchView() {
     return (
         <View style={styles.searchContainer}>
             <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={styles.header}>Discover</Text>
-            <TextInput style={styles.searchBox} placeholder='Search...'></TextInput>
+                <Text style={styles.header}>Discover</Text>
+                <TextInput style={styles.searchBox} placeholder='Search...'></TextInput>
 
 
-            <CardRow label="Others near you searched" />
+                <CardRow label="Others near you searched" />
 
-            <CardRow label="On sale near you" />
+                <CardRow label="On sale near you" />
 
-            <CardColumn label="Stores near you" />
-        </ScrollView>
+                <CardColumn label="Stores near you" />
+            </ScrollView>
         </View>
     )
 }

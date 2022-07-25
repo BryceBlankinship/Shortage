@@ -8,10 +8,19 @@
 - [ ] Discover page "algorithm" (backend)
 - [ ] Populate nearby places with Google Places API (backend)
 - [ ] Populate nearby places component (frontend)
+- [ ] Add interactive map on map page*
+- [ ] Add Greycliff CF Font
+- [ ] Get fine-tuned designs made (im no designer...)
 
 # Issues
 
 - [ ] Search not working on desktop
+
+## Map Page
+Wanted to add more details here so I don't forget... Map is going to be whitebackground with black accents, with only colors being on places.
+
+## Design Philosophy
+I'm not a designer, but the app is going to be a lot of black and white, with some greys to add contrast on certain parts of the UI, there will be an accent color or skew of accent colors, but that is not decided yet. Will likely be going with a nice dark green or classic IOS blue. The colors need to promote professionalism and eagerness at the same time. The colors should make users want to engage with the application, not just admire it.
 
 ### How Shortage is set up
 

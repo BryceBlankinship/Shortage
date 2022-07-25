@@ -1,15 +1,17 @@
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-    horizontalCardContainer: {
+    verticalCardContainer: {
         flex: 1,
         flexDirection: 'column',
-        minHeight: 100,
+        width: 100,
+        minHeight: 130,
         padding: 10,
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 8,
-        marginTop: 10,
+        marginLeft: 20,
+        marginRight: -10,
     },
 
     title: {
@@ -22,9 +24,9 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function HorizontalCard(props){
+export default function VerticalCard(props){
     return(
-        <View style={styles.horizontalCardContainer}>
+        <View style={styles.verticalCardContainer}>
             <Text style={styles.title}>Hey There</Text>
             <Text style={styles.desc}>This is a desc</Text>
         </View>
