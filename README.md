@@ -12,7 +12,8 @@
 - [ ] Add Greycliff CF Font
 - [ ] Get fine-tuned designs made (im no designer...)
 
-# Issues
+# Known Issues
+### If you encounter an issue anywhere in the program, or documentation, create an issue on Github and point to it here.
 
 - [ ] Search not working on desktop
 
