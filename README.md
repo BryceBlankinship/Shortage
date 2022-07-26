@@ -13,7 +13,7 @@
 - [ ] Get fine-tuned designs made (im no designer...)
 
 # Known Issues
-### If you encounter an issue anywhere in the program, or documentation, create an issue on Github and point to it here.
+#### If you encounter an issue anywhere in the program, or documentation, create an issue on Github and point to it here.
 
 - [ ] Search not working on desktop
 
