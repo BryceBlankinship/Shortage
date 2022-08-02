@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, TextInput } from 'react-native';
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 const styles = StyleSheet.create({
     listViewContainer: {
@@ -99,8 +100,8 @@ const sampleData = [
 
 const Stack = createNativeStackNavigator();
 
-export function ListNavController(){
-    return(
+export function ListNavController() {
+    return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="List View" component={ListView} />
             <Stack.Screen name="List Details" component={ListScreen} />
@@ -111,8 +112,22 @@ export function ListNavController(){
 export default function ListView({ navigation }) {
     const [showCreateList, setShowCreateList] = useState(true);
     const [createListText, setCreateListText] = useState('');
+    const [userListTitles, setUserListTitles] = useState([]);
 
-    const handleListCreate = (e) => {
+    useEffect(() => {
+        async function getUserListTitles() {
+                const res = await axios.get('http://192.168.1.21:8080/lists/bryce');
+                setUserListTitles(res.data.data.data);
+        }
+
+        getUserListTitles();
+    }, []);
+
+    useEffect(() => {
+        console.log("USER LIST TITLES: " + userListTitles)
+    }, [userListTitles]);
+
+    const handleListCreate = () => {
         console.log(createListText);
     }
 
@@ -126,7 +141,7 @@ export default function ListView({ navigation }) {
                     </Pressable>
                 </View>
                 {showCreateList && <TextInput style={styles.listInput} placeholder='Enter List Title...' autoFocus={true} returnKeyType={'done'} onChangeText={text => setCreateListText(text)} onSubmitEditing={handleListCreate}></TextInput>}
-                {sampleData.map((item, index) => {
+                {userListTitles.map((item, index) => {
                     return (
                         <Pressable key={'LIST-ITEM-PRESSABLE_' + index} onPress={() => navigation.navigate("List Details", { item: item })}>
                             <ListItem item={item} key={'LIST-ITEM_' + index} />
@@ -140,17 +155,17 @@ export default function ListView({ navigation }) {
 
 export function ListItem(props) {
     return (
-            <View style={styles.listItem}>
-                <Text>{props.item.title}</Text>
-                <Image style={styles.icon} source={require('../assets/forward-circle-outline.png')} />
-            </View>
+        <View style={styles.listItem}>
+            <Text>{props.item}</Text>
+            <Image style={styles.icon} source={require('../assets/forward-circle-outline.png')} />
+        </View>
     );
 }
 
-export function ListScreen({ route }){
+export function ListScreen({ route }) {
     const { item } = route.params;
 
-    return(
+    return (
         <ScrollView>
             <View style={styles.listViewContainer}>
                 <Text style={styles.header}>{item.title}</Text>
@@ -159,7 +174,7 @@ export function ListScreen({ route }){
                 <TextInput style={styles.listInput} placeholder='Add An Item...'></TextInput>
 
                 {item.contents.map((content, index) => {
-                    return(
+                    return (
                         <Text key={index} style={styles.listItem}>{content}</Text>
                     );
                 })}
