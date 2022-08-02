@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginLeft: 20,
         marginRight: -10,
+        backgroundColor: 'white'
     },
 
     title: {

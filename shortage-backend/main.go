@@ -13,6 +13,7 @@ func main() {
 	configs.ConnectDB()
 
 	routes.UserRoute(app)
+	routes.ListRoute(app)
 
 	app.Listen(":8080")
 }

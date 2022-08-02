@@ -3,7 +3,9 @@ import { StatusBar } from 'expo-status-bar';
 import { createContext, useEffect, useState } from 'react';
 import MapView from './screens/MapView';
 import SearchView from './screens/SearchView';
-import ListView from './screens/ListView';
+import { ListNavController } from './screens/ListView';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,11 +24,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingBottom: 25,
     paddingTop: 10,
+    borderTopWidth: 1,
     borderColor: 'gray',
-    borderWidth: 1,
     borderStyle: 'solid',
     // 101% width so border doesn't show on sides
-    width: '101%',
+    width: '102%',
     alignSelf: 'stretch',
     justifyContent: 'center',
     backgroundColor: 'white'
@@ -46,12 +48,14 @@ const styles = StyleSheet.create({
   }
 });
 
+const Tab = createBottomTabNavigator();
+
 const ThemeContext = createContext({
-  
+
 })
 
 export default function App() {
-  const [view, setView] = useState(1);
+  const [view, setView] = useState(-1);
   const [theme, setTheme] = useState();
   const colorScheme = useColorScheme();
 
@@ -76,34 +80,34 @@ export default function App() {
   }
 
   return (
+
     <View style={styles.container}>
       <StatusBar />
-      <Navbar setMapView={setMapView} setSearchView={setSearchView} setListView={setListView}>
-        {view === 0 ? <MapView /> : null}
-        {view === 1 ? <SearchView /> : null}
-        {view === 2 ? <ListView /> : null}
-      </Navbar>
-    </View>
 
+      <NavigationContainer>
+        <Tab.Navigator tabBar={props => <Navbar {...props} />} initialRouteName="Search" screenOptions={{ headerShown: false }}>
+          <Tab.Screen name="Search" component={SearchView} />
+          <Tab.Screen name="Map" component={MapView} />
+          <Tab.Screen name="List" component={ListNavController} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </View>
   );
 }
 
 
-export function Navbar(props) {
+export function Navbar({ navigation }) {
   return (
-    <>
-      {props.children}
       <View style={styles.navbar}>
-        <Pressable onPress={props.setMapView}>
+        <Pressable onPress={() => navigation.navigate('Map')}>
           <Image style={styles.icon} source={require('./assets/navigate-circle-outline.png')} />
         </Pressable>
-        <Pressable onPress={props.setSearchView}>
+        <Pressable onPress={() => navigation.navigate('Search')}>
           <Image style={styles.searchIcon} source={require('./assets/search-circle-outline.png')} />
         </Pressable>
-        <Pressable onPress={props.setListView}>
+        <Pressable onPress={() => navigation.navigate('List')}>
           <Image style={styles.icon} source={require('./assets/list-circle-outline.png')} />
         </Pressable>
       </View>
-    </>
   )
 }

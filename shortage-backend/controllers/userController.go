@@ -36,8 +36,8 @@ func CreateUser(c *fiber.Ctx) error {
 	newUser := models.User{
 		Id:       primitive.NewObjectID(),
 		Name:     user.Name,
-		Location: user.Location,
-		Title:    user.Title,
+		Email:    user.Email,
+		Password: user.Password,
 	}
 
 	result, err := userCollection.InsertOne(ctx, newUser)
