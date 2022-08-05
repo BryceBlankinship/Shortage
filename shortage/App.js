@@ -1,5 +1,5 @@
-import { Appearance, Button, Image, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
-import { createContext, useEffect, useState } from 'react';
+import { Image, Pressable, StyleSheet, StatusBar, useColorScheme, View } from 'react-native';
+import React, { createContext, useEffect, useState } from 'react';
 import MapView from './screens/MapView';
 import SearchView from './screens/SearchView';
 import { ListNavController } from './screens/ListView';
@@ -79,8 +79,8 @@ export default function App() {
   }
 
   return (
-
     <View style={styles.container}>
+      <StatusBar barStyle={theme === 'dark' ? 'dark-content' : 'light-content'} />
 
       <NavigationContainer>
         <Tab.Navigator tabBar={props => <Navbar {...props} />} initialRouteName="Search" screenOptions={{ headerShown: false }}>

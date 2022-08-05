@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { default as GoogleMap, PROVIDER_GOOGLE } from 'react-native-maps';
 import { MAPS_API_KEY } from '@env';

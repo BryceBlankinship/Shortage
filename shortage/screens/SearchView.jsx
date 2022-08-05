@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import VerticalCard from '../components/verticalCard';
 import HorizontalCard from '../components/horizontalCard';
