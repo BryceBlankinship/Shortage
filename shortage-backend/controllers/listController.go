@@ -44,9 +44,10 @@ func CreateList(c *fiber.Ctx) error {
 	res, _ := listCollection.Distinct(ctx, "title", filter)
 
 	newList := models.List{
-		UserId: list.UserId,
-		Title:  list.Title,
-		Desc:   list.Desc,
+		UserId:   list.UserId,
+		Title:    list.Title,
+		Desc:     list.Desc,
+		Contents: list.Contents,
 	}
 
 	var finalResponse error
