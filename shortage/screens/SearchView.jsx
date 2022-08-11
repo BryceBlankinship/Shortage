@@ -20,13 +20,13 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginTop: 10,
         padding: 10,
-        backgroundColor: '#F5F5F5',
+        color: '#F5F5F5',
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: 'gray',
         borderRadius: 8,
         marginRight: 20,
         backgroundColor: 'white'
-    },
+      },
 
     cardRowOuterContainer: {
         marginTop: 20,
@@ -61,7 +61,6 @@ export default function SearchView() {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Text style={styles.header}>Discover</Text>
                 <TextInput style={styles.searchBox} placeholder='Search...'></TextInput>
-
 
                 <CardRow label="Others near you searched" />
 

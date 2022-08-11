@@ -98,18 +98,40 @@ func GetList(c *fiber.Ctx) error {
 
 }
 
-func UpdateList(c *fiber.Ctx) error {
+func AddItem(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	userId := c.Params("userId")
-	var list models.List
+	title := c.Params("listTitle")
+	var feedItem models.FeedItem
 	defer cancel()
 
-	err := listCollection.FindOne(ctx, bson.M{"title": list.Title, "userid": userId}).Decode(&list)
+	//validate the request body
+	if err := c.BodyParser(&feedItem); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+	}
+
+	//use the validator library to validate required fields
+	if validationErr := validate.Struct(&feedItem); validationErr != nil {
+		return c.Status(http.StatusBadRequest).JSON(responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": validationErr.Error()}})
+	}
+
+	newItem := models.FeedItem{
+		UserId:   feedItem.UserId,
+		Title:    feedItem.Title,
+		Comments: feedItem.Comments,
+		Desc:     feedItem.Desc,
+		Price:    feedItem.Price,
+		ImageUri: feedItem.ImageUri,
+	}
+
+	filter := bson.M{"title": title, "userid": userId}
+	update := bson.M{"contents": newItem}
+	res, err := listCollection.UpdateOne(ctx, filter, bson.M{"$push": update})
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
 	}
 
-	return c.Status(http.StatusOK).JSON(responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": &list}})
+	return c.Status(http.StatusOK).JSON(responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": res}})
 
 }
 

@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, TextInput, Alert } from 'react-native';
 import axios from 'axios';
 import { useEffect } from 'react';
+import FeedCard from '../components/feedCard';
+import { NotificationContext } from '../contexts/NotificationContext';
 
 const styles = StyleSheet.create({
     listViewContainer: {
         marginTop: 70,
+        flex: 1,
+        flexDirection: 'column',
+        alignSelf: 'stretch',
+        margin: 20,
+    },
+    listModalContainer: {
         flex: 1,
         flexDirection: 'column',
         alignSelf: 'stretch',
@@ -22,8 +30,8 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     headerIcon: {
-        width: 30,
-        height: 30,
+        width: 40,
+        height: 40,
     },
 
     desc: {
@@ -76,7 +84,7 @@ export default function ListView({ navigation }) {
     useEffect(() => {
         async function getUserListTitles() {
             try {
-                const res = await axios.get('http://192.168.1.21:8080/lists/bryce');
+                const res = await axios.get('http://192.168.1.31:8080/lists/bryce');
                 setUserListTitles(res.data.data.data);
             } catch (err) {
                 console.error(err);
@@ -97,9 +105,8 @@ export default function ListView({ navigation }) {
             desc: "",
             contents: []
         });
-            let res = await axios.post('http://192.168.1.21:8080/lists', params);
+            const res = await axios.post('http://192.168.1.31:8080/lists', params);
             console.log(res);
-
     }
 
     return (
@@ -128,7 +135,7 @@ export function ListItem(props) {
     return (
         <View style={styles.listItem}>
             <Text>{props.title}</Text>
-            <Image style={styles.icon} source={require('../assets/forward-circle-outline.png')} />
+            <Image style={styles.icon} source={props.modal ? require('../assets/add-circle-outline.png') : require('../assets/forward-circle-outline.png')} />
         </View>
     );
 }
@@ -140,7 +147,7 @@ export function ListScreen({ route }) {
     useEffect(() => {
         async function getItemByTitle() {
             try {
-                const res = await axios.get(`http://192.168.1.21:8080/lists/bryce/${title}`);
+                const res = await axios.get(`http://192.168.1.31:8080/lists/bryce/${title}`);
                 setItem(res.data.data);
             } catch (err) {
                 console.error(err);
@@ -160,10 +167,69 @@ export function ListScreen({ route }) {
 
                 {item.data.contents.map((content, index) => {
                     return (
-                        <Text key={index} style={styles.listItem}>{content}</Text>
+                        <FeedCard key={'FEED_CARD_LIST_' + index} item={content} />
                     );
                 })}
             </View>
         </ScrollView>
     )
+}
+
+export function ListModal({ navigation, route }){
+    const { item } = route.params;
+    const notification = useContext(NotificationContext);
+    const [userListTitles, setUserListTitles] = useState([]);
+
+    useEffect(() => {
+        async function getUserListTitles() {
+            try {
+                const res = await axios.get('http://192.168.1.31:8080/lists/bryce');
+                setUserListTitles(res.data.data.data);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        getUserListTitles();
+    }, []);
+
+    const addItemToList = async (title) => {
+        try{
+            const res = await axios.patch(`http://192.168.1.31:8080/lists/bryce/${title}`, item);
+            if(res.status === 200) {
+                navigation.goBack(null)
+                notification.trigger('Success!', 'Added that to the list', 0);
+            }else{
+                Alert.alert('Oops! We messed up...', 'Adding ' + item.userId + "'s " + item.title + ' to that list failed.', [
+                    {
+                        text: 'Cancel',
+                        style: 'cancel'
+                    },
+                    {
+                        text: 'Try Again',
+                        onPress: () => addItemToList(title)
+                    }
+                ])
+            }
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+    return(
+        <View style={styles.listModalContainer}>
+            <ScrollView>
+                <View style={styles.headerContainer}>
+                    <Text style={styles.header}>My Lists</Text>
+                </View>
+                {userListTitles.map((title, index) => {
+                    return (
+                        <Pressable key={'LIST-ITEM-PRESSABLE_' + index} onPress={() => addItemToList(title)}>
+                            <ListItem modal={true} title={title} key={'LIST-ITEM_' + index} />
+                        </Pressable>
+                    )
+                })}
+            </ScrollView>
+        </View>
+    );
 }

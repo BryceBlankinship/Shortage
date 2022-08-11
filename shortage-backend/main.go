@@ -14,6 +14,7 @@ func main() {
 
 	routes.UserRoute(app)
 	routes.ListRoute(app)
+	routes.FeedRoute(app)
 
 	app.Listen(":8080")
 }

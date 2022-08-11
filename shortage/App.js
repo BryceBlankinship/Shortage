@@ -5,6 +5,9 @@ import SearchView from './screens/SearchView';
 import { ListNavController } from './screens/ListView';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SettingsStackController from './screens/SettingsView';
+import FeedStackController from './screens/FeedView';
+import NotificationContextProvider from './contexts/NotificationContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,15 +38,17 @@ const styles = StyleSheet.create({
 
   icon: {
     width: 40,
-    height: 40
+    height: 40,
+    marginLeft: 10,
+    marginRight: 10
   },
 
   searchIcon: {
     width: 45,
     height: 45,
     bottom: 2.5,
-    marginLeft: 40,
-    marginRight: 40
+    marginLeft: 10,
+    marginRight: 10
   }
 });
 
@@ -51,7 +56,9 @@ const Tab = createBottomTabNavigator();
 
 const ThemeContext = createContext({
 
-})
+});
+
+export const AuthContext = createContext();
 
 export default function App() {
   const [view, setView] = useState(-1);
@@ -66,46 +73,46 @@ export default function App() {
     console.log(theme);
   }, [theme]);
 
-  const setMapView = () => {
-    setView(0);
-  }
-
-  const setSearchView = () => {
-    setView(1);
-  }
-
-  const setListView = () => {
-    setView(2);
-  }
-
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={theme === 'dark' ? 'dark-content' : 'light-content'} />
+    <AuthContext.Provider value={undefined}>
+      <View style={styles.container}>
+        <NotificationContextProvider>
+          <StatusBar barStyle={theme === 'light' ? 'dark-content' : 'light-content'} />
 
-      <NavigationContainer>
-        <Tab.Navigator tabBar={props => <Navbar {...props} />} initialRouteName="Search" screenOptions={{ headerShown: false }}>
-          <Tab.Screen name="Search" component={SearchView} />
-          <Tab.Screen name="Map" component={MapView} />
-          <Tab.Screen name="List" component={ListNavController} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </View>
+          <NavigationContainer>
+            <Tab.Navigator tabBar={props => <Navbar {...props} />} initialRouteName="Feed" screenOptions={{ headerShown: false }}>
+              <Tab.Screen name="Search" component={SearchView} />
+              <Tab.Screen name="Map" component={MapView} />
+              <Tab.Screen name="List" component={ListNavController} />
+              <Tab.Screen name="Settings" component={SettingsStackController} />
+              <Tab.Screen name="Feed" component={FeedStackController} />
+            </Tab.Navigator>
+          </NavigationContainer>
+        </NotificationContextProvider>
+      </View>
+    </AuthContext.Provider>
   );
 }
 
 
 export function Navbar({ navigation }) {
   return (
-      <View style={styles.navbar}>
-        <Pressable onPress={() => navigation.navigate('Map')}>
-          <Image style={styles.icon} source={require('./assets/navigate-circle-outline.png')} />
-        </Pressable>
-        <Pressable onPress={() => navigation.navigate('Search')}>
-          <Image style={styles.searchIcon} source={require('./assets/search-circle-outline.png')} />
-        </Pressable>
-        <Pressable onPress={() => navigation.navigate('List')}>
-          <Image style={styles.icon} source={require('./assets/list-circle-outline.png')} />
-        </Pressable>
-      </View>
+    <View style={styles.navbar}>
+      <Pressable onPress={() => navigation.navigate('Map')}>
+        <Image style={styles.icon} source={require('./assets/navigate-circle-outline.png')} />
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate('Search')}>
+        <Image style={styles.searchIcon} source={require('./assets/search-circle-outline.png')} />
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate('Feed')}>
+        <Image style={styles.searchIcon} source={require('./assets/cube-outline.png')} />
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate('List')}>
+        <Image style={styles.icon} source={require('./assets/list-circle-outline.png')} />
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate('Settings')}>
+        <Image style={styles.icon} source={require('./assets/person-circle-outline.png')} />
+      </Pressable>
+    </View>
   )
 }
