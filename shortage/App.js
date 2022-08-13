@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, StatusBar, useColorScheme, View } from 'react-native';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import MapView from './screens/MapView';
 import SearchView from './screens/SearchView';
 import { ListNavController } from './screens/ListView';
@@ -8,6 +8,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsStackController from './screens/SettingsView';
 import FeedStackController from './screens/FeedView';
 import NotificationContextProvider from './contexts/NotificationContext';
+import AuthContextProvider, { AuthContext, AuthScreen, AuthStackController } from './contexts/AuthContext';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,17 +55,26 @@ const styles = StyleSheet.create({
 });
 
 const Tab = createBottomTabNavigator();
+const AuthStack = createNativeStackNavigator();
 
 const ThemeContext = createContext({
 
 });
 
-export const AuthContext = createContext();
-
 export default function App() {
   const [view, setView] = useState(-1);
   const [theme, setTheme] = useState();
   const colorScheme = useColorScheme();
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      setAuthenticated(false);
+    }
+
+    checkAuthStatus();
+  }, []);
+
 
   useEffect(() => {
     setTheme(colorScheme);
@@ -74,26 +85,26 @@ export default function App() {
   }, [theme]);
 
   return (
-    <AuthContext.Provider value={undefined}>
-      <View style={styles.container}>
-        <NotificationContextProvider>
-          <StatusBar barStyle={theme === 'light' ? 'dark-content' : 'light-content'} />
+      <AuthContextProvider>
+        <NavigationContainer>
+        <View style={styles.container}>
+          <NotificationContextProvider>
+            <StatusBar barStyle={theme === 'light' ? 'dark-content' : 'light-content'} />
 
-          <NavigationContainer>
-            <Tab.Navigator tabBar={props => <Navbar {...props} />} initialRouteName="Feed" screenOptions={{ headerShown: false }}>
+            <Tab.Navigator tabBar={props => <Navbar {...props} />} initialRouteName={"Feed"} screenOptions={{ headerShown: false }}>
               <Tab.Screen name="Search" component={SearchView} />
               <Tab.Screen name="Map" component={MapView} />
               <Tab.Screen name="List" component={ListNavController} />
               <Tab.Screen name="Settings" component={SettingsStackController} />
               <Tab.Screen name="Feed" component={FeedStackController} />
             </Tab.Navigator>
-          </NavigationContainer>
-        </NotificationContextProvider>
-      </View>
-    </AuthContext.Provider>
+
+          </NotificationContextProvider>
+        </View>
+        </NavigationContainer>
+      </AuthContextProvider>
   );
 }
-
 
 export function Navbar({ navigation }) {
   return (

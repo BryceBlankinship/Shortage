@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, View, Text, ScrollView, Image, Pressable, TextInput } from 'react-native';
 import axios from 'axios';
 import FeedCard from '../components/feedCard';
 import { ListModal } from './ListView';
+import { AuthContext } from '../contexts/AuthContext';
 
 const styles = StyleSheet.create({
     feedViewContainer: {
